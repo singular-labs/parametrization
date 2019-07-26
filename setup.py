@@ -10,7 +10,7 @@ setup(
     description='Simpler PyTest parametrization',
     author="Singular Labs",
     author_email='contact@singular.net',
-    url='https://github.com/singular/parametrization',
+    url='https://github.com/singular-labs/parametrization',
     keywords="pytest, parametrize, parametrization, singular",
     install_requires=REQUIREMENTS,
     license="MIT License",
