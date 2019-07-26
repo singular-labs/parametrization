@@ -4,7 +4,7 @@ REQUIREMENTS = ['pytest', 'six']
 
 setup(
     name='pytest-parametrization',
-    version='2019.1.1',
+    version='2019.1.2',
     py_modules=['parametrization'],
     provides=['parametrization'],
     description='Simpler PyTest parametrization',
