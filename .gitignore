@@ -1,3 +1,5 @@
 .idea
 *.pyc
 .pytest_cache
+pytest_parametrization.egg-info
+dist
