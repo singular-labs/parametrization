@@ -2,14 +2,17 @@ from setuptools import setup
 
 REQUIREMENTS = ['pytest', 'six']
 
+README = open('./README.md').read()
+
 setup(
     name='pytest-parametrization',
-    version='2019.1.3',
+    version='2019.1.4',
     py_modules=['parametrization'],
     provides=['parametrization'],
     description='Simpler PyTest parametrization',
-    author="Singular Labs",
-    author_email='contact@singular.net',
+    long_description=README,
+    author="Singular Labs, Inc",
+    author_email='devs@singular.net',
     url='https://github.com/singular-labs/parametrization',
     keywords="pytest, parametrize, parametrization, singular",
     install_requires=REQUIREMENTS,
