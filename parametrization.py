@@ -48,6 +48,13 @@ class Parametrization(object):
     def add_case(self, name, *args, **kwargs):
         self.cases.append((name, args, kwargs))
 
+    def add_legacy_cases(self, base_name, fields, values):
+        fields_with_values = [zip(fields, value) for value in values]
+        for case in fields_with_values:
+            name = "{} -> {}".format(base_name, ", ".join(['='.join([str(v) for v in case_values])
+                                                           for case_values in case]))
+            self.add_case(name, **dict(case))
+
     @classmethod
     def parameters(cls, *parameters):
         def decorator(f):
@@ -89,6 +96,19 @@ class Parametrization(object):
 
             for key, value in six.iteritems(kwargs):
                 parametrization.defaults[key] = value
+
+            return parametrization
+
+        return decorator
+
+    @classmethod
+    def legacy_cases(cls, base_name, fields, values):
+        def decorator(f):
+            if not isinstance(f, Parametrization):
+                parametrization = Parametrization(f)
+            else:
+                parametrization = f
+            parametrization.add_legacy_cases(base_name, fields, values)
 
             return parametrization
 
