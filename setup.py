@@ -2,7 +2,10 @@ from setuptools import setup
 
 REQUIREMENTS = ['pytest', 'six']
 
-README = open('./README.md').read()
+from os import path
+this_directory = path.abspath(path.dirname(__file__))
+with open(path.join(this_directory, 'README.md'), 'rb') as f:
+    long_description = f.read().decode('utf8')
 
 setup(
     name='pytest-parametrization',
@@ -10,7 +13,8 @@ setup(
     py_modules=['parametrization'],
     provides=['parametrization'],
     description='Simpler PyTest parametrization',
-    long_description=README,
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     author="Singular Labs, Inc",
     author_email='devs@singular.net',
     url='https://github.com/singular-labs/parametrization',
