@@ -1,6 +1,12 @@
 # pytest-parametrization
 Simpler PyTest parametrization
 
+## How to install
+```bash
+pip install pytest-parametrization
+```
+
+
 ## How to use
 ### Explicit parameters
 ```python
