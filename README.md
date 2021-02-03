@@ -45,3 +45,17 @@ from parametrization import Parametrization
 def test_somthing(actual, expected):
     assert actual == expected
 ```
+### Generate name based on arguments
+```python
+from parametrization import Parametrization
+
+@Parametrization.name_factory(lambda actual, expected: '{}=={}'.format(actual, expected))
+@Parametrization.case(actual=1, expected=1)
+@Parametrization.case(actual=2, expected=2)
+@Parametrization.case('special-name', actual=3, expected=3)
+def test_somthing(actual, expected):
+    assert actual == expected
+```
+
+As can be seen from the example, you can also give explicit name for a case
+even if you are using name factory.
