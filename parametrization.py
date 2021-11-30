@@ -11,6 +11,7 @@ class Parametrization(object):
     def __init__(self, test_function):
         self.test_function = test_function
 
+        self.name_factory = None
         self.cases = []
         self.defaults = {}
 
@@ -33,11 +34,15 @@ class Parametrization(object):
         case_cls = _namedtuple('Case', arguments_names)
 
         for name, args, kwargs in reversed(self.cases):
-            ids.append(name)
-
             for argument_name in arguments_names[len(args):]:
                 if argument_name not in kwargs and argument_name in self.defaults:
                     kwargs[argument_name] = self.defaults[argument_name]
+
+            if name is None:
+                assert self.name_factory, 'Name factory must be given with @Parametrization.name_factory'
+                name = self.name_factory(**kwargs)
+
+            ids.append(name)
 
             arguments_values.append(tuple(case_cls(*args, **kwargs)))
 
@@ -74,7 +79,20 @@ class Parametrization(object):
         return decorator
 
     @classmethod
-    def case(cls, name, *args, **kwargs):
+    def name_factory(cls, create_name):
+        def decorator(f):
+            if not isinstance(f, Parametrization):
+                parametrization = Parametrization(f)
+            else:
+                parametrization = f
+            parametrization.name_factory = create_name
+
+            return parametrization
+
+        return decorator
+
+    @classmethod
+    def case(cls, name=None, *args, **kwargs):
         def decorator(f):
             if not isinstance(f, Parametrization):
                 parametrization = Parametrization(f)
