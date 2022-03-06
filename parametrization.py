@@ -1,10 +1,8 @@
-import pytest
-import six
 from collections import namedtuple as _namedtuple
 
-__all__ = [
-    'Parametrization'
-]
+import pytest
+
+__all__ = ["Parametrization"]
 
 
 class Parametrization(object):
@@ -22,8 +20,8 @@ class Parametrization(object):
                 name, args, kwargs = case
                 if args:
                     raise Exception("args are forbidden with auto-detection, please use kwargs")
-                parameters.update(six.viewkeys(kwargs))
-            parameters.update(six.viewkeys(self.defaults))
+                parameters.update(kwargs.keys())
+            parameters.update(self.defaults.keys())
             parameters = list(parameters)
 
         arguments_names = parameters
@@ -31,24 +29,24 @@ class Parametrization(object):
         arguments_values = []
         ids = []
 
-        case_cls = _namedtuple('Case', arguments_names)
+        case_cls = _namedtuple("Case", arguments_names)
 
         for name, args, kwargs in reversed(self.cases):
-            for argument_name in arguments_names[len(args):]:
+            for argument_name in arguments_names[len(args) :]:
                 if argument_name not in kwargs and argument_name in self.defaults:
                     kwargs[argument_name] = self.defaults[argument_name]
 
             if name is None:
-                assert self.name_factory, 'Name factory must be given with @Parametrization.name_factory'
+                assert self.name_factory, "Name factory must be given with @Parametrization.name_factory"
                 name = self.name_factory(**kwargs)
 
             ids.append(name)
 
             arguments_values.append(tuple(case_cls(*args, **kwargs)))
 
-        return pytest.mark.parametrize(argnames=arguments_names,
-                                       argvalues=arguments_values,
-                                       ids=ids)(self.test_function)
+        return pytest.mark.parametrize(argnames=arguments_names, argvalues=arguments_values, ids=ids)(
+            self.test_function
+        )
 
     def add_case(self, name, *args, **kwargs):
         self.cases.append((name, args, kwargs))
@@ -56,8 +54,9 @@ class Parametrization(object):
     def add_legacy_cases(self, base_name, fields, values):
         fields_with_values = [zip(fields, value) for value in values]
         for case in fields_with_values:
-            name = "{} -> {}".format(base_name, ", ".join(['='.join([str(v) for v in case_values])
-                                                           for case_values in case]))
+            name = "{} -> {}".format(
+                base_name, ", ".join(["=".join([str(v) for v in case_values]) for case_values in case])
+            )
             self.add_case(name, **dict(case))
 
     @classmethod
@@ -112,7 +111,7 @@ class Parametrization(object):
             else:
                 parametrization = f
 
-            for key, value in six.iteritems(kwargs):
+            for key, value in kwargs.items():
                 parametrization.defaults[key] = value
 
             return parametrization

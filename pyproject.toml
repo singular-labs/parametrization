@@ -1,0 +1,25 @@
+[tool.black]
+line-length = 120
+target-version = ['py37', 'py38', 'py39']
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[tool.poetry]
+name = "pytest-parametrization"
+version = "2021.4.1"
+description = "Simpler PyTest parametrization"
+authors = ["Singular Labs, Inc <devs@singular.net>"]
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+pytest = "*"
+
+[tool.poetry.dev-dependencies]
+black = "*"
+isort = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
