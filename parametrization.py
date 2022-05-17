@@ -49,11 +49,11 @@ class Parametrization(object):
         self.cases.append((name, args, kwargs))
 
     def add_legacy_cases(self, base_name, fields, values):
-        fields_with_values = [zip(fields, value) for value in values]
+        fields_with_values = [dict(zip(fields, value)) for value in values]
         for case in fields_with_values:
             name = "{} -> {}".format(base_name, ", ".join(['='.join([str(v) for v in case_values])
                                                            for case_values in case]))
-            self.add_case(name, **dict(case))
+            self.add_case(name, **case)
 
     @classmethod
     def parameters(cls, *parameters):
