@@ -9,7 +9,7 @@ with open(path.join(this_directory, 'README.md'), 'rb') as f:
 
 setup(
     name='pytest-parametrization',
-    version='2021.4.1',
+    version='2022.2.1',
     py_modules=['parametrization'],
     provides=['parametrization'],
     description='Simpler PyTest parametrization',
