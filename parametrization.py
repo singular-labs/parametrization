@@ -3,7 +3,8 @@ import six
 from collections import namedtuple as _namedtuple
 
 __all__ = [
-    'Parametrization'
+    'Parametrization', 'parameters', 'autodetect_parameters', 'name_factory',
+    'case', 'default_parameters', 'legacy_cases',
 ]
 
 
@@ -131,3 +132,11 @@ class Parametrization(object):
             return parametrization
 
         return decorator
+
+
+parameters = Parametrization.parameters
+autodetect_parameters = Parametrization.autodetect_parameters
+name_factory = Parametrization.name_factory
+case = Parametrization.case
+default_parameters = Parametrization.default_parameters
+legacy_cases = Parametrization.legacy_cases
