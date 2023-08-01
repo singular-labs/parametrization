@@ -19,7 +19,7 @@ class Parametrization(object):
         if parameters is None:
             parameters = set()
             for case in self.cases:
-                name, args, kwargs = case
+                name, args, kwargs, marks = case
                 if args:
                     raise Exception("args are forbidden with auto-detection, please use kwargs")
                 parameters.update(six.viewkeys(kwargs))
@@ -33,7 +33,7 @@ class Parametrization(object):
 
         case_cls = _namedtuple('Case', arguments_names)
 
-        for name, args, kwargs in reversed(self.cases):
+        for name, args, kwargs, marks in reversed(self.cases):
             for argument_name in arguments_names[len(args):]:
                 if argument_name not in kwargs and argument_name in self.defaults:
                     kwargs[argument_name] = self.defaults[argument_name]
@@ -44,14 +44,18 @@ class Parametrization(object):
 
             ids.append(name)
 
-            arguments_values.append(tuple(case_cls(*args, **kwargs)))
+            argument_value = tuple(case_cls(*args, **kwargs))
+            if marks is not None:
+                argument_value = pytest.param(*argument_value, marks=marks)
+
+            arguments_values.append(argument_value)
 
         return pytest.mark.parametrize(argnames=arguments_names,
                                        argvalues=arguments_values,
                                        ids=ids)(self.test_function)
 
-    def add_case(self, name, *args, **kwargs):
-        self.cases.append((name, args, kwargs))
+    def add_case(self, name, *args, marks=None, **kwargs):
+        self.cases.append((name, args, kwargs, marks))
 
     def add_legacy_cases(self, base_name, fields, values):
         fields_with_values = [dict(zip(fields, value)) for value in values]
@@ -92,13 +96,13 @@ class Parametrization(object):
         return decorator
 
     @classmethod
-    def case(cls, name=None, *args, **kwargs):
+    def case(cls, name=None, *args, marks=None, **kwargs):
         def decorator(f):
             if not isinstance(f, Parametrization):
                 parametrization = Parametrization(f)
             else:
                 parametrization = f
-            parametrization.add_case(name, *args, **kwargs)
+            parametrization.add_case(name, *args, marks=marks, **kwargs)
 
             return parametrization
 

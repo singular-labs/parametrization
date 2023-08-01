@@ -10,6 +10,7 @@ pip install pytest-parametrization
 ## How to use
 ### Explicit parameters
 ```python
+import pytest
 from parametrization import Parametrization
  
 @Parametrization.parameters("actual", "expected")
@@ -18,9 +19,15 @@ from parametrization import Parametrization
 @Parametrization.case("some_case_2", 1, expected=1)
 @Parametrization.case("some_case_3", 2, 2)
 @Parametrization.case("some_case_4", 3, 3)
+@Parametrization.case("some_case_5", 4, 5, marks=pytest.mark.xfail)
 def test_somthing(actual, expected):
     assert actual == expected
 ```
+
+Note that both the `name` and `marks` keyword arguments are reserved for
+special purposes as shown above, so parameters with these names must have their
+values provided as positional arguments.
+
 ### Auto-detect parameters
 ```python
 from parametrization import Parametrization
