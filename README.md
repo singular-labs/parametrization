@@ -21,6 +21,19 @@ from parametrization import Parametrization
 def test_somthing(actual, expected):
     assert actual == expected
 ```
+
+### Shortcuts
+```python
+from parametrization import case, parameters
+ 
+@parameters("actual", "expected")
+@case(name="some_case_0", actual=1, expected=2)
+@case("some_case_1", actual=1, expected=2)
+@case("some_case_2", 1, expected=1)
+def test_somthing(actual, expected):
+    assert actual == expected
+```
+
 ### Auto-detect parameters
 ```python
 from parametrization import Parametrization
